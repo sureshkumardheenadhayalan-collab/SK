@@ -1,0 +1,33 @@
+winget install -e --id Docker.DockerDesktop
+
+winget --version
+
+
+winget install -e --id Docker.DockerDesktop
+
+winget source update--- This refreshes the package repositories.
+
+After that, install Docker Desktop:
+winget install -e --id Docker.DockerDesktop --source winget
+
+If the source update fails, try resetting the sources:
+
+winget source reset --force
+
+Then run:
+
+winget source update
+
+SureshDheenadhayalan30  --username
+
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+
+wsl status
+
+wsl --status
+
+wsl --update
+
+wsl --update
+wsl --set-default-version 2
