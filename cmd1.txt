@@ -1,0 +1,6 @@
+•uv python install 3.12
+•uv sync
+•docker compose build
+•docker compose up -d
+
+https://github.com/karthick180887/spark-internals
