@@ -1,5 +1,50 @@
+SELECT * FROM demo.students order by Total DESC;
+ 
 select Gender,Name,Total, 
+
 row_number() over(order by Total desc) as Populatity, 
+
 rank() over(order by Total desc) as Populatity_R,
-dense_rank over(order by Total desc) as Populatity_d 
+
+dense_rank() over(order by Total desc) as Populatity_d 
+
 from demo.students;
+ 
+select Gender,Name,Total, 
+
+row_number() over(partition by Gender order by Total desc) as Populatity, 
+
+rank() over(partition by Gender order by Total desc) as Populatity_R,
+
+dense_rank() over(partition by Gender order by Total desc) as Populatity_d 
+
+from demo.students;
+ 
+SELECT *
+
+FROM (
+
+    SELECT
+
+        Gender,
+
+        Name,
+
+        Total,
+
+        ROW_NUMBER() OVER (
+
+            PARTITION BY Gender
+
+            ORDER BY Total DESC, Name ASC
+
+        ) AS Popularity
+
+    FROM demo.students
+
+) AS pop
+
+WHERE Popularity <= 3
+
+ORDER BY Gender, Popularity;
+ 
