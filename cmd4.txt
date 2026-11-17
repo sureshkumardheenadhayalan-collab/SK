@@ -1,0 +1,16 @@
+sql("""
+WITH order_totals AS (
+    SELECT order_id,
+           SUM(quantity * unit_price * (1 - discount)) AS total
+    FROM order_items
+    GROUP BY order_id
+)
+SELECT o.status,
+       COUNT(*)               AS orders,
+       ROUND(AVG(t.total), 2) AS avg_order_value,
+       ROUND(SUM(t.total), 2) AS revenue
+FROM orders AS o
+JOIN order_totals AS t ON t.order_id = o.order_id
+GROUP BY o.status
+ORDER BY revenue DESC
+""")
