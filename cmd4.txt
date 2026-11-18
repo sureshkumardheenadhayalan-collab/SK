@@ -1,50 +1,20 @@
-SELECT * FROM demo.students order by Total DESC;
- 
-select Gender,Name,Total, 
-
-row_number() over(order by Total desc) as Populatity, 
-
-rank() over(order by Total desc) as Populatity_R,
-
-dense_rank() over(order by Total desc) as Populatity_d 
-
-from demo.students;
- 
-select Gender,Name,Total, 
-
-row_number() over(partition by Gender order by Total desc) as Populatity, 
-
-rank() over(partition by Gender order by Total desc) as Populatity_R,
-
-dense_rank() over(partition by Gender order by Total desc) as Populatity_d 
-
-from demo.students;
- 
-SELECT *
-
-FROM (
-
-    SELECT
-
-        Gender,
-
-        Name,
-
-        Total,
-
-        ROW_NUMBER() OVER (
-
-            PARTITION BY Gender
-
-            ORDER BY Total DESC, Name ASC
-
-        ) AS Popularity
-
-    FROM demo.students
-
-) AS pop
-
-WHERE Popularity <= 3
-
-ORDER BY Gender, Popularity;
- 
+The Shawshank Redemption,3
+The Matrix,5
+12 Angry Men,3
+12 Angry Men,4
+The Matrix,5
+Pulp Fiction,4
+The Godfather,5
+The Shawshank Redemption,2
+Pulp Fiction,4
+The Godfather,5
+12 Angry Men,2
+The Godfather,3
+Pulp Fiction,4
+12 Angry Men,1
+The Shawshank Redemption,2
+12 Angry Men,1
+The Shawshank Redemption,5
+Pulp Fiction,5
+Pulp Fiction,2
+The Matrix,4
