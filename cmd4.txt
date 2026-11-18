@@ -1,6 +1,8 @@
-rdd2.reduceByKey(lambda x , y : x if x < y else y).collect()
+from pyspark.sql.functions import col, lit
  
-rdd2.reduceByKey(lambda x , y : x if x > y else y).collect()
+df1 = df.withColumn("roll",col("roll").cast("String"))
+df1.printSchema()
  
-rdd2 = rdd1.map(lambda x: (x.split(',')[0],int(x.split(',')[1])))
-rdd2.collect()
+
+df3 = df.withColumn("Country",lit("INDIA"))
+df3.show(10)
