@@ -1,29 +1,29 @@
 # Databricks notebook source
-
 from pyspark.sql import SparkSession
-
 from pyspark.sql.functions import col, lit, udf
-
-from pyspark.sql.types import IntegerType
-
+from pyspark.sql.types import DoubleType
 spark = SparkSession.builder.appName("Spark DataFrames").getOrCreate()
  
 # COMMAND ----------
- 
-df = spark.read.options(header='True', inferSchema='True').csv('/FileStore/tables/OfficeData.csv')
-
-df.show()
+df = spark.read.options(header="True",inferSchema="True").csv("/Volumes/workspace/default/karthick1808/OfficeData.csv")
+df.printSchema()
  
 # COMMAND ----------
  
-def get_total_salary(salary):
-
-  return salary + 100
+def get_incr(state, salary, bonus):
+  sum = 0
+  if state == "NY":
+    sum = salary * 0.10
+    sum += bonus * 0.05
+  elif state == "CA":
+    sum = salary * 0.12
+    sum += bonus * 0.03
+  return sum
  
+incrUDF = udf(lambda x,y,z: get_incr(x,y,z), DoubleType())
  
-totalSalaryUDF = udf(lambda x: get_total_salary(x), IntegerType())
+df.withColumn("increment", incrUDF(df.state, df.salary, df.bonus)).show()
  
+# COMMAND ----------
  
- 
-df.withColumn("total_salary", totalSalaryUDF(df.salary)).show()
- 
+(90000  * 0.10) + (10000 * 0.05)
