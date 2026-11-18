@@ -1,20 +1,18 @@
-The Shawshank Redemption,3
-The Matrix,5
-12 Angry Men,3
-12 Angry Men,4
-The Matrix,5
-Pulp Fiction,4
-The Godfather,5
-The Shawshank Redemption,2
-Pulp Fiction,4
-The Godfather,5
-12 Angry Men,2
-The Godfather,3
-Pulp Fiction,4
-12 Angry Men,1
-The Shawshank Redemption,2
-12 Angry Men,1
-The Shawshank Redemption,5
-Pulp Fiction,5
-Pulp Fiction,2
-The Matrix,4
+rdd2 = rdd1.map(lambda x: (x.split(',')[0],   (int(x.split(',')[1]),1)  ))
+
+rdd2.collect()
+
+ 
+rdd2 = rdd1.map(lambda x: (x.split(',')[0],   (int(x.split(',')[1]),1)  ))
+
+rdd2.collect()
+
+ 
+rdd2 = rdd1.map(lambda x: (x.split(',')[0],   (int(x.split(',')[1]),1)  ))
+
+rdd3 = rdd2.reduceByKey(lambda x,y:(x[0]+y[0],x[1]+y[1]))
+
+rdd4 = rdd3.map(lambda x: (x[0],x[1][0]/x[1][1]))
+
+rdd4.collect()
+ 
