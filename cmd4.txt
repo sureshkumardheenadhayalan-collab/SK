@@ -1,41 +1,45 @@
-# Databricks notebook source
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, lit, udf
-from pyspark.sql.types import DoubleType
-spark = SparkSession.builder.appName("Spark DataFrames").getOrCreate()
- 
-df = spark.read.options(header="True",inferSchema="True").csv("/Volumes/workspace/default/karthick1808/flights_sample_3m.csv")
-df.printSchema()
- 
- 
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import *
-from pyspark.sql.types import *
- 
-spark = SparkSession.builder.appName("DataCleansing").getOrCreate()
- 
-# Sample messy data
-data = [
-    (1, "  John Doe  ", "john.doe@email.com", "25", "2023-01-15", 50000.0, "New York"),
-    (2, "Jane Smith", "jane@email.com", "30", "15/02/2023", None, "new york"),
-    (3, "  John Doe  ", "john.doe@email.com", "25", "2023-01-15", 50000.0, "New York"),  # duplicate
-    (4, "Bob Johnson", None, "abc", "2023-03-20", 45000.5, "Chicago"),
-    (5, "Alice Brown", "alice@email.com", "28", None, 60000.0, "  Los Angeles  "),
-    (6, "Charlie", "charlie@email.com", "35", "2023-04-01", -1000.0, "Houston"),  # negative salary
-    (7, None, "test@email.com", "40", "2023-05-10", 55000.0, "Phoenix"),
-    (8, "David Wilson", "david@email.com", "22", "2023-06-15", 48000.0, None),
-]
- 
-columns = ["id", "name", "email", "age", "join_date", "salary", "city"]
- 
-df = spark.createDataFrame(data, columns)
-df.show(truncate=False)
- 
-arrow/cleansing.py at main · karthick180887/arrow
-arrow/cleansing.py at main · karthick180887/arrow
-Contribute to karthick180887/arrow development by creating an account on GitHub.
- 
 # Drop rows with any null
 df_drop_any = df.na.drop()
 df_drop_any.show()
+ 
+# Drop rows only if specific columns are null
+df_drop_subset = df.na.drop(subset=["name", "email"])
+df_drop_subset.show()
+ 
+ 
+# Fill nulls with default values
+df_filled = df.na.fill({
+    "name": "Unknown",
+    "email": "no-email@unknown.com",
+    "salary": 0.0,
+    "city": "Unknown"
+})
+ 
+df_filled.show()
+ 
+# Remove exact duplicates
+df_no_dup = df.dropDuplicates()
+print(df_no_dup.show())
+ 
+# Remove duplicates based on specific columns
+df_no_dup_subset = df.dropDuplicates(["name", "email"])
+print(df_no_dup_subset.show())
+ 
+df_clean_str = df.withColumn("name", trim(col("name"))) \
+                 .withColumn("city", initcap(trim(col("city")))) \
+                 .withColumn("email", lower(trim(col("email"))))
+ 
+df_clean_str.show()
+ 
+from pyspark.sql.functions import *
+ 
+df_dates = df.withColumn(
+    "join_date_clean",
+    coalesce(
+        try_to_date(col("join_date"), "yyyy-MM-dd"),
+        try_to_date(col("join_date"), "dd/MM/yyyy"),
+        try_to_date(col("join_date"), "MM/dd/yyyy")
+    )
+)
+df_dates.select("join_date", "join_date_clean").show(truncate=False)
  
