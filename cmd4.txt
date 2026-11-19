@@ -1,8 +1,18 @@
-from pyspark import SparkContext
-from pyspark.streaming import StreamingContext
-sc = SparkContext.getOrCreate()
-ssc = StreamingContext(sc,20)
-rdd = ssc.textFileStream("DataStreaming")
-rdd.pprint()
-ssc.start()
-ssc.awaitTerminationOrTimeout(1000000)
+curl.exe -X POST "http://localhost:8088/app/kill/?id=app-20261119071124-0002&terminate=true"
+
+
+port based streaming:
+PS C:\Users\karth> docker exec -it jupyter_lab bash
+root@b10a25cfd5ce:/opt/spark/python# apt-get update && apt-get install -y netcat-openbsd
+Hit:1 http://deb.debian.org/debian bookworm InRelease
+Hit:2 http://deb.debian.org/debian bookworm-updates InRelease
+Hit:3 http://deb.debian.org/debian-security bookworm-security InRelease
+Reading package lists... Done
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+netcat-openbsd is already the newest version (1.219-1).
+0 upgraded, 0 newly installed, 0 to remove and 3 not upgraded.
+root@b10a25cfd5ce:/opt/spark/python# nc -lk 9999
+hi welcome
+hi againg welcome all hi again
