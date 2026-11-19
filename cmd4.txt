@@ -1,9 +1,7 @@
 from pyspark.sql import SparkSession
-spark = SparkSession.builder \
-    .appName("MyFirstSparkApp") \
-    .getOrCreate()
-word= spark.readStream.txt("data")
-word=word.groupby("value").count()
-word.writeStream.format("console".outputmode("complete").start()
-display(word)
-             
+
+from pyspark.sql.functions import lit, col, explode
+
+import pyspark.sql.functions as f
+
+ 
