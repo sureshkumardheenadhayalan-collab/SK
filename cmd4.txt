@@ -1,45 +1,8 @@
-# Drop rows with any null
-df_drop_any = df.na.drop()
-df_drop_any.show()
- 
-# Drop rows only if specific columns are null
-df_drop_subset = df.na.drop(subset=["name", "email"])
-df_drop_subset.show()
- 
- 
-# Fill nulls with default values
-df_filled = df.na.fill({
-    "name": "Unknown",
-    "email": "no-email@unknown.com",
-    "salary": 0.0,
-    "city": "Unknown"
-})
- 
-df_filled.show()
- 
-# Remove exact duplicates
-df_no_dup = df.dropDuplicates()
-print(df_no_dup.show())
- 
-# Remove duplicates based on specific columns
-df_no_dup_subset = df.dropDuplicates(["name", "email"])
-print(df_no_dup_subset.show())
- 
-df_clean_str = df.withColumn("name", trim(col("name"))) \
-                 .withColumn("city", initcap(trim(col("city")))) \
-                 .withColumn("email", lower(trim(col("email"))))
- 
-df_clean_str.show()
- 
-from pyspark.sql.functions import *
- 
-df_dates = df.withColumn(
-    "join_date_clean",
-    coalesce(
-        try_to_date(col("join_date"), "yyyy-MM-dd"),
-        try_to_date(col("join_date"), "dd/MM/yyyy"),
-        try_to_date(col("join_date"), "MM/dd/yyyy")
-    )
-)
-df_dates.select("join_date", "join_date_clean").show(truncate=False)
- 
+from pyspark import SparkContext
+from pyspark.streaming import StreamingContext
+sc = SparkContext.getOrCreate()
+ssc = StreamingContext(sc,20)
+rdd = ssc.textFileStream("DataStreaming")
+rdd.pprint()
+ssc.start()
+ssc.awaitTerminationOrTimeout(1000000)
