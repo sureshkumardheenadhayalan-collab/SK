@@ -1,7 +1,4 @@
-from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("ETL Pipeline").config("spark.jars", "postgresql-42.7.13.jar").getOrCreate()
 
-from pyspark.sql.functions import lit, col, explode
-
-import pyspark.sql.functions as f
-
+df = spark.read.text("WordData.txt")
  
