@@ -1,4 +1,12 @@
-spark = SparkSession.builder.appName("ETL Pipeline").config("spark.jars", "postgresql-42.7.13.jar").getOrCreate()
+driver = "org.postgresql.Driver"
 
-df = spark.read.text("WordData.txt")
+url = "jdbc:postgresql://34.93.70.143/"
+
+table = "public.karthick1808"
+
+user = "karthick1808"
+
+password = "Welcome@01"
+ 
+wordCount.write.format("jdbc").option("driver", driver).option("url",url).option("dbtable", table).option("mode", "append").option("user",user).option("password", password).save()
  
