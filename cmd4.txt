@@ -1,34 +1,43 @@
-X_train_easy, X_test_easy, y_train_easy, y_test_easy = train_test_split(
+from sklearn.compose import ColumnTransformer
 
-    X_easy, y_easy,
+from sklearn.pipeline import Pipeline
 
-    test_size=0.25,
+from sklearn.impute import SimpleImputer
 
-    random_state=RANDOM_STATE,
-
-    stratify=y_easy
-
-)
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
  
-print("Training records:", len(X_train_easy))
+numeric_pipeline = Pipeline(steps=[
 
-print("Testing records:", len(X_test_easy))
+    ("imputer", SimpleImputer(strategy="median")),
 
-print("\nTraining class counts:")
+    ("scaler", StandardScaler())
 
-print(y_train_easy.value_counts())
-
+])
  
-y_pred_easy = knn_easy.predict(X_test_easy)
+categorical_pipeline = Pipeline(steps=[
 
-print("Actual Values",list(y_test_easy))
+    ("imputer", SimpleImputer(strategy="most_frequent")),
 
-print("\nPredicted Values",list(y_pred_easy))
+    ("onehot", OneHotEncoder(handle_unknown="ignore"))
 
-print("\nAccuracy: ",round(accuracy_score(y_test_easy, y_pred_easy), 3))
+])
+ 
+preprocessor = ColumnTransformer(transformers=[
 
-print("Classification Report")
+    ("numeric", numeric_pipeline, numeric_features),
 
-print((classification_report(y_test_easy, y_pred_easy, zero_division=0)))
+    ("categorical", categorical_pipeline, categorical_features)
+
+])
+ 
+knn_pipeline = Pipeline(steps=[
+
+    ("preprocessing", preprocessor),
+
+    ("model", KNeighborsClassifier(n_neighbors=7, weights="distance"))
+
+])
+ 
+knn_pipeline
 
  
