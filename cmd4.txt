@@ -1,12 +1,34 @@
-driver = "org.postgresql.Driver"
+X_train_easy, X_test_easy, y_train_easy, y_test_easy = train_test_split(
 
-url = "jdbc:postgresql://34.93.70.143/"
+    X_easy, y_easy,
 
-table = "public.karthick1808"
+    test_size=0.25,
 
-user = "karthick1808"
+    random_state=RANDOM_STATE,
 
-password = "Welcome@01"
+    stratify=y_easy
+
+)
  
-wordCount.write.format("jdbc").option("driver", driver).option("url",url).option("dbtable", table).option("mode", "append").option("user",user).option("password", password).save()
+print("Training records:", len(X_train_easy))
+
+print("Testing records:", len(X_test_easy))
+
+print("\nTraining class counts:")
+
+print(y_train_easy.value_counts())
+
+ 
+y_pred_easy = knn_easy.predict(X_test_easy)
+
+print("Actual Values",list(y_test_easy))
+
+print("\nPredicted Values",list(y_pred_easy))
+
+print("\nAccuracy: ",round(accuracy_score(y_test_easy, y_pred_easy), 3))
+
+print("Classification Report")
+
+print((classification_report(y_test_easy, y_pred_easy, zero_division=0)))
+
  
